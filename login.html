@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="assets/css/loginStyle.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+
+<body>
+    <header id="header" class="fixed-top d-flex align-items-center header-transparent">
+        <div class="container d-flex justify-content-between align-items-center">
+
+            <div class="logo">
+                <h1 class="text-light"><a href="mainpage.html"><span>Elma</span></a></h1>
+            </div>
+        </div>
+    </header><!-- End Header -->
+    <div class="container">
+        <input type="checkbox" id="flip">
+        <div class="forms">
+            <div class="form-content">
+                <div class="login-form">
+                    <div class="title">Login</div>
+                    <div action="#">
+                        <div class="input-boxes">
+                            <div class="input-box">
+                                <i class="fas fa-envelope"></i>
+                                <input type="text" placeholder="Enter your email" id="email" required>
+                            </div>
+                            <div class="input-box">
+                                <i class="fas fa-lock"></i>
+                                <input type="password" placeholder="Enter your password" id="pass" required>
+                            </div>
+                            <div class="text"><a href="ForgotPass.html">Forgot password?</a></div>
+                            <div class="button input-box">
+                                <input type="button" value="Sumbit" id="Login">
+                            </div>
+                            <div class="text sign-up-text">Don't have an account? <label for="flip">Sigup now</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script type="module">
+        import { getAuth, signInWithEmailAndPassword  } from "https://www.gstatic.com/firebasejs/9.4.0/firebase-auth.js";
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.4.0/firebase-app.js";
+        import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/9.4.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyC6gJk6M7MhOBYazwokBOgJPuqLVbDQ3AM",
+            authDomain: "fir-elma-26529.firebaseapp.com",
+            projectId: "fir-elma-26529",
+            storageBucket: "fir-elma-26529.appspot.com",
+            messagingSenderId: "993393754618",
+            appId: "1:993393754618:web:4103d9f4a5b555cd54e443",
+            measurementId: "G-Y9X2N50J8J"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth();
+
+        Login.addEventListener('click', (e) => {
+            var email = document.getElementById('email').value;
+            var password = document.getElementById('pass').value;
+            
+            signInWithEmailAndPassword(auth, email, password)
+                .then((userCredential) => {
+
+                    const user = userCredential.user;
+                    alert('başarılı');
+                    window.location.href="mainPage.html";
+                })
+                .catch((error) => {
+                    const errorCode = error.code;
+                    const errorMessage = error.message;
+                    alert(errorMessage)
+                });
+        });
+    </script>
+</body>
+
+</html>

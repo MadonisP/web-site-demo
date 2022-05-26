@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Signup For Free</title>
+    <link rel="stylesheet" href="assets/css/signupStyle.css">
+
+
+</head>
+
+<body>
+    <header id="header" class="fixed-top d-flex align-items-center header-transparent">
+        <div class="container d-flex justify-content-between align-items-center">
+
+            <div class="logo">
+                <h1 class="text-light"><a href="mainpage.html"><span>Elma</span></a></h1>
+            </div>
+        </div>
+    </header><!-- End Header -->
+
+    <div class="container">
+        <div class="title">Registration</div>
+        <div class="content">
+            <div action="#" class="form">
+                <div class="user-details">
+                    <div class="input-box">
+                        <span class="details">Full Name</span>
+                        <input id="name" type="text" placeholder="Enter your name" required>
+                    </div>
+                    <div class="input-box">
+                        <span class="details">Company Name</span>
+                        <input id="company" type="text" placeholder="Enter your Company Name" required>
+                    </div>
+                    <div class="input-box">
+                        <span class="details">Email</span>
+                        <input id="email" type="text" placeholder="Enter your email" required>
+                    </div>
+                    <div class="input-box">
+                        <span class="details">Phone Number</span>
+                        <input id="phoneNo" type="text" placeholder="Enter your number" required>
+                    </div>
+                    <div class="input-box">
+                        <span class="details">Password</span>
+                        <input id="pass" type="text" placeholder="Enter your password" required>
+                    </div>
+                    <div class="input-box">
+                        <span class="details">Confirm Password</span>
+                        <input id="passCheck" type="text" placeholder="Confirm your password" required>
+                    </div>
+                </div>
+                <div class="gender-details" required>
+                    <input type="radio" name="gender" id="dot-1" value="1">
+                    <input type="radio" name="gender" id="dot-2" value="2">
+                    <input type="radio" name="gender" id="dot-3" value="0">
+                    <span class="gender-title">Gender</span>
+                    <div class="category">
+                        <label for="dot-1">
+                            <span class="dot one"></span>
+                            <span class="gender">Male</span>
+                        </label>
+                        <label for="dot-2">
+                            <span class="dot two"></span>
+                            <span class="gender">Female</span>
+                        </label>
+                        <label for="dot-3">
+                            <span class="dot three"></span>
+                            <span class="gender">Prefer not to say</span>
+                        </label>
+                    </div>
+                </div>
+                <div class="button">
+                    <input type="button" value="Register" id="signUp">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.4.0/firebase-app.js";
+        import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/9.4.0/firebase-firestore.js";
+        import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/9.4.0/firebase-auth.js";
+
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyC6gJk6M7MhOBYazwokBOgJPuqLVbDQ3AM",
+            authDomain: "fir-elma-26529.firebaseapp.com",
+            projectId: "fir-elma-26529",
+            storageBucket: "fir-elma-26529.appspot.com",
+            messagingSenderId: "993393754618",
+            appId: "1:993393754618:web:4103d9f4a5b555cd54e443",
+            measurementId: "G-Y9X2N50J8J"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        const auth = getAuth();
+
+
+        signUp.addEventListener('click', (e) => {
+
+            var name = document.getElementById('name').value;
+            var company = document.getElementById('company').value;
+            var email = document.getElementById('email').value;
+            var phoneNo = document.getElementById('phoneNo').value;
+            var password = document.getElementById('pass').value;
+            var passcheck = document.getElementById('passCheck').value;
+            var radios = document.getElementsByName('gender');
+            for (var i = 0, length = radios.length; i < length; i++) {
+                if (radios[i].checked) {
+                    var radioV = radios[i].value
+                    if (radioV == 1) {
+                        var radioD = "male";
+                        break;
+                    }
+                    else if (radioV == 2) {
+                        radioD = "female";
+                        break;
+                    }
+                    else {
+                        radioD = "unknown";
+                        break;
+                    }
+                }
+            }
+
+            if (password == passcheck) {
+                createUserWithEmailAndPassword(auth, email, password)
+                    .then((userCredential) => {
+
+                        var user = userCredential.user;
+
+                        try {
+                            const docRef = addDoc(collection(db, "users"), {
+                                fName: name,
+                                company: company,
+                                email: email,
+                                phoneNumber: phoneNo,
+                                password: password,
+                                gender: radioD,
+                            });
+                            console.log("Document written with ID: ", docRef.id);
+                            window.location.href="addService.html";
+                        } catch (e) {
+                            console.error("Error adding document: ", e);
+                        }
+                    })
+                    .catch((error) => {
+                        const errorCode = error.code;
+                        const errorMessage = error.message;
+
+                        alert(errorMessage);
+
+                    });
+            }
+            else {
+                alert('password check is wrong')
+            }
+        }
+        );
+
+
+
+    </script>
+</body>
+
+</html>
